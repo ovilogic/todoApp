@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 
 
@@ -25,6 +25,43 @@ const toDoItems = [
 
 function App() {
   const [toDos, setToDo] = useState(toDoItems)
+  const [viewCompleted, setView] = useState(false)
+  const [activeItem, setItem] = useState(
+    {
+      title: '',
+      description: '',
+      completed: false
+    },
+  )
+  const [toDoList, setList] = useState([]);
+
+  useEffect(async () => {
+    try {
+      const res = await fetch('http://localhost:8000/api/todos/');
+      const fetchedList = await res.json();
+      setList(fetchedList)
+    }
+    
+    catch (eroare) {
+      console.log(eroare)
+    }
+  });
+
+  var renderItems = () => {
+    const newItems = toDoList.filter(item => item.completed == viewCompleted);
+    return newItems.map(item => (
+      <li 
+        key={item.id}
+        className='list-group-item d-flex justify-content-between align-items-center'>
+          <span
+            className={"todo-title mr-2 ${ viewCompleted ? 'completed-todo' : ''}"
+            }
+            title={item.description}>
+              {item.title}
+            </span>
+        </li>
+    ))
+  }
 
   return (
     <div className="content">
@@ -32,12 +69,7 @@ function App() {
         <div className='col-md-6 col-sm-10 mx-auto p-0'>
           <div className='card p-3'>
             <ul className='list-group list-group-flush'>
-              {toDos.map(item => (
-                <div>
-                  <h1>{item.title}</h1>
-                  <span>{item.description}</span>
-                </div>
-              ))}
+              {renderItems()}
             </ul>
           </div>
         </div>
