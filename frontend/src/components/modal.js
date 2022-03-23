@@ -4,7 +4,7 @@ import {
     Modal,
     ModalHeader,
     ModalBody,
-    MOdalFooter,
+    ModalFooter,
     Form,
     FormGroup,
     Input,
@@ -44,7 +44,7 @@ const CustomModal = (props) => {
                                 type='checkbox'
                                 name='completed'
                                 checked={activeItem.completed}
-                                onChange={handleChange}
+                                onChange={handleChange()}
                                 />
                                 Completed
                         </Label>
