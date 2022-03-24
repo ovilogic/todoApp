@@ -9,3 +9,8 @@ class TodoView(viewsets.ModelViewSet):
     queryset = Todo.objects.all()
 
 
+def something(request):
+    return render(request, 'todo/temppates/home.html')
+
+
+
