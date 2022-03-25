@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Modal from './components/modal'
 
 
 
@@ -26,6 +27,7 @@ const toDoItems = [
 function App() {
   const [toDos, setToDo] = useState(toDoItems)
   const [viewCompleted, setView] = useState(false)
+  const [toDoList, setList] = useState([]);
   const [activeItem, setItem] = useState(
     {
       title: '',
@@ -33,7 +35,7 @@ function App() {
       completed: false
     },
   )
-  const [toDoList, setList] = useState([]);
+  
 
   useEffect(async () => {
     try {
@@ -46,6 +48,19 @@ function App() {
       console.log(eroare)
     }
   });
+
+  const [modal, setModal] = useState(false)
+/*
+  let toggle = () => {
+    setModal(!modal)
+  }
+
+  let handleSubmit = item => {
+    toggle();
+   
+
+  }
+  */
 
   var renderItems = () => {
     const newItems = toDoList.filter(item => item.completed == viewCompleted);
@@ -71,6 +86,7 @@ function App() {
             <ul className='list-group list-group-flush'>
               {renderItems()}
             </ul>
+            <Modal activeItem={activeItem} />
           </div>
         </div>
       </div>
