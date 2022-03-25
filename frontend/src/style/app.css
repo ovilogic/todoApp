@@ -1,0 +1,45 @@
+* {
+    box-sizing: border-box;
+    /* border: 1px dotted brown; */
+}
+
+
+.switchboard {
+    display: flex-container;
+    background-color: blanchedalmond;
+    height: 500px;
+    width: 599px;
+    border: 5px double black;
+    border-radius: 20px;
+    box-shadow: black 5px 5px 10px;
+    
+}
+
+button {
+    background-color: rgb(100, 250, 200);
+    margin-left: 20px;
+    color: white;
+    font-size: 24px;
+    padding: 20px 10px;
+    border-radius: 12px;
+    border: 2px solid black;
+    transition-duration: 1s;
+    
+
+
+}
+
+button:hover {
+    background-color: aqua;
+    box-shadow: 0px 13px 3px black;
+    transform: translateY(-5px);
+}
+
+button:active {
+    transition-duration: 100ms;
+    box-shadow: 0px 1px 1px black;
+    transform: translateY(5px);
+    color: red;
+    
+    
+}

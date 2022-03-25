@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Modal from './components/modal'
+import MyModal from './components/myModal'
+import './style/app.css'
 
 
 
@@ -35,7 +36,14 @@ function App() {
       completed: false
     },
   )
+  const [show, setShow] = useState(false)
+
   
+  let display = {}
+  if (show) {
+    display = {display: 'block'}
+  }
+ 
 
   useEffect(async () => {
     try {
@@ -49,28 +57,15 @@ function App() {
     }
   });
 
-  const [modal, setModal] = useState(false)
-/*
-  let toggle = () => {
-    setModal(!modal)
-  }
-
-  let handleSubmit = item => {
-    toggle();
-   
-
-  }
-  */
-
+ 
+  
   var renderItems = () => {
     const newItems = toDoList.filter(item => item.completed == viewCompleted);
     return newItems.map(item => (
       <li 
         key={item.id}
-        className='list-group-item d-flex justify-content-between align-items-center'>
+        >
           <span
-            className={"todo-title mr-2 ${ viewCompleted ? 'completed-todo' : ''}"
-            }
             title={item.description}>
               {item.title}
             </span>
@@ -79,18 +74,19 @@ function App() {
   }
 
   return (
-    <div className="content">
-      <div className='row'>
-        <div className='col-md-6 col-sm-10 mx-auto p-0'>
-          <div className='card p-3'>
-            <ul className='list-group list-group-flush'>
+   
+    <div className='switchboard'>
+            <ul >
               {renderItems()}
             </ul>
-            <Modal activeItem={activeItem} />
-          </div>
-        </div>
-      </div>
-
+            <button onClick={() => {
+              setShow(!show)
+             
+            }
+            }>Add a task </button>
+            <MyModal appear={display}/>
+          
+   
 
     </div>
   );
