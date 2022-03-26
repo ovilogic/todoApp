@@ -57,7 +57,7 @@ function App() {
     catch (eroare) {
       console.log(eroare)
     }
-  }, 20000);
+  }, 10000);
   });
 
  

@@ -10,7 +10,7 @@ const MyModal = (props) => {
         {
            title: '',
            description: '',
-           asign_user: ''
+           
         }
     )
     
@@ -18,13 +18,15 @@ const MyModal = (props) => {
     useEffect(() => {
         fetch('http://localhost:8000/api/todos/', {
             method: 'POST',
-            headers: {"Content-type": "application/json"},
-            body: JSON.stringify(submit)
+            headers: {"Content-type": "application/json; charset=UTF-8"},
+            body: JSON.stringify(submit),
+            
         }
         )
-            .then(async (resp) => await resp.json())
-            .then(json =>  console.log(json, 'the json'))
-            .catch(err =>  console.log(err))
+            .then(() => {
+                console.log('new task added')
+            })
+                
 
     }, [submit]);
 
@@ -35,24 +37,29 @@ const MyModal = (props) => {
         <div className='modal' style={props.appear}>
             
             <form onSubmit={(e) => {
+                e.preventDefault();
         
                 setSubmit(
                     {
                         title: title,
                         description: descr,
-                        asign_user: user
+                        
                     }
                     );
-               
+                console.log(title)
+                console.log(descr)
+                console.log(submit)
+                console.log(JSON.stringify(submit), 'stringified object')
+                    
                 }
+                
                 }
             >
                 <label htmlFor='title'>Title: </label>
                 <input type='text' name='title' value={title} onChange={(event) => setTitle(event.target.value)}></input><br />
                 <label htmlFor='description'>Description: </label><br />
                 <textarea name='description' value={descr} onChange={(event) => setDescr(event.target.value)}></textarea><br />
-                <label htmlFor='user'>User: </label>
-                <input type='text' name='user' placeholder='who' value={user} onChange={(event) => setUser(event.target.value)}></input>
+                
                 <button type='submit' >Submit</button>
             </form>
             
