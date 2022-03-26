@@ -10,3 +10,15 @@
     margin-top: 20px;
     padding: 20px;
 }
+
+form button {
+    background-color: rgb(10, 125, 20);
+    margin-top: 20px;
+    margin-left: 20px;
+    color: white;
+    font-size: 12px;
+    padding: 2px;
+    border-radius: 5px;
+    border: 2px solid black;
+    transition-dur1ation: 1s;
+}

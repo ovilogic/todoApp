@@ -45,7 +45,9 @@ function App() {
   }
  
 
-  useEffect(async () => {
+  useEffect(() => {
+    setTimeout(
+    async () => {
     try {
       const res = await fetch('http://localhost:8000/api/todos/');
       const fetchedList = await res.json();
@@ -55,6 +57,7 @@ function App() {
     catch (eroare) {
       console.log(eroare)
     }
+  }, 20000);
   });
 
  
