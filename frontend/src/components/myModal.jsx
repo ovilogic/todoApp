@@ -5,17 +5,16 @@ const MyModal = (props) => {
     
     const [title, setTitle] = useState('')
     const [descr, setDescr] = useState('')
-    const [user, setUser] = useState('')
+    
     const [submit, setSubmit] = useState(
         {
            title: '',
            description: '',
-           
         }
     )
     
 
-    useEffect(() => {
+    const saveToDo = function() {
         fetch('http://localhost:8000/api/todos/', {
             method: 'POST',
             headers: {"Content-type": "application/json; charset=UTF-8"},
@@ -24,33 +23,38 @@ const MyModal = (props) => {
         }
         )
             .then(() => {
+                setSubmit(
+                    {
+                        title: title,
+                        description: descr,
+        
+                    }
+                    );
+                    
+                setTitle('');
+                setDescr('');
                 console.log('new task added')
-            })
+            });
+
+        
+        
+    }
+
+    // useEffect(() => {
+        
                 
 
-    }, [submit]);
+    // }, [submit]);
 
-
+    
     
     
     return ( 
         <div className='modal' style={props.appear}>
             
-            <form onSubmit={(e) => {
-                e.preventDefault();
-        
-                setSubmit(
-                    {
-                        title: title,
-                        description: descr,
-                        
-                    }
-                    );
-                console.log(title)
-                console.log(descr)
-                console.log(submit)
-                console.log(JSON.stringify(submit), 'stringified object')
-                    
+            <form onSubmit={() => {
+                // e.preventDefault();
+                saveToDo()
                 }
                 
                 }
