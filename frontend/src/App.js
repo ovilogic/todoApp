@@ -32,15 +32,15 @@ function App() {
   }
  
 
-   useEffect(() => {
-  let timer1 = setTimeout( () => fetchPage(), 20000);
-  
+  useEffect(() => {
+  let timer1 = setTimeout( () => fetchPage(page), 1000);
+  console.log('useEffect s-a incarcat')
   return () => {
     clearTimeout(timer1)
   }
   
   
-  }, []);
+  }, [page]);
 
 
  const link = 'http://localhost:8000/api/todos/'
@@ -78,7 +78,8 @@ const deleteItem = function(item) {
   var renderItems = () => {
 
     if (res != null) {
-    const newItems = res.results.filter(item => item.completed == viewCompleted);
+    const newItems = res.results;
+    // .filter(item => item.completed == viewCompleted);
     return newItems.map(item => (
       <li 
         key={item.id}
@@ -101,11 +102,12 @@ const deleteItem = function(item) {
   const fetchPage = function(number) {
     //  setPage(number);
     try {
-      fetch('http://localhost:8000/api/todos/?page=' + number)
+      fetch('http://localhost:8000/api/todos/?page=' + number + '&completed=' + viewCompleted)
       .then( fetchedList => fetchedList.json() )
       .then( list => {
         
-        console.log(list)
+        console.log('aici e lista', list)
+        
         setRes(list);
         // setList(list.results);
         // setCount(list.count);
@@ -118,18 +120,23 @@ const deleteItem = function(item) {
     }
   }
 
-  
+  const fetchPageClick = function(e) {
+    const pageIndex = e.target.text
+    fetchPage(pageIndex)
+  }
 
   const renderPagination = function() {
     let total = res != null ? res.count : 0;
+    let pageCount = total / 5
+    if (total % 5 > 0) pageCount++
 
     let active = 1;
     let items = [];
     
-    for (let number = 1; number <= total / 5; number++) {
+    for (let number = 1; number <= pageCount; number++) {
       console.log('number', number)
       items.push(
-        <Pagination.Item onClick={ fetchPage(number) } key={number} active={number === active}>
+        <Pagination.Item onClick={fetchPageClick} key={number} active={number === active}>
           {number}
         </Pagination.Item>,
       );
