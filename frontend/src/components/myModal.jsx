@@ -40,14 +40,6 @@ const MyModal = (props) => {
         
     }
 
-    // useEffect(() => {
-        
-                
-
-    // }, [submit]);
-
-    
-    
     
     return ( 
         <div className='modal' style={props.appear}>

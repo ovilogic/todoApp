@@ -5,10 +5,12 @@
 .modal {
     display: none;
     border: 2px black solid;
-    width: 50%;
-    margin: auto;
-    margin: 20px;
+    height: 20vh;
+    
+    
     padding: 20px;
+    background-color: bisque;
+    
 }
 
 form button {

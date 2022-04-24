@@ -12,8 +12,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 function App() {
   const [toDos, setToDo] = useState([])
   const [viewCompleted, setView] = useState(false)
-  const [toDoList, setList] = useState([]);
-  const [count, setCount] = useState(0);
   const [page, setPage] = useState(1)
   const [activeItem, setItem] = useState(
     {
@@ -24,73 +22,65 @@ function App() {
   )
   const [show, setShow] = useState(false)
   const [res, setRes] = useState(null)
+  const [active, setActive] = useState(1)
 
-  
   let display = {}
   if (show) {
-    display = {display: 'block'}
+    display = {display: 'block',
+  height: '300px',
+  width: '40vw'}
   }
- 
 
-  useEffect(() => {
-  let timer1 = setTimeout( () => fetchPage(page), 1000);
-  console.log('useEffect s-a incarcat')
-  return () => {
-    clearTimeout(timer1)
+  const link = 'http://localhost:8000/api/todos/'
+
+  const completed = function(item) {
+    item.completed = !item.completed;
+    fetch(link, {
+      method: 'POST',
+      headers: {"Content-type": "application/json; charset=UTF-8"},
+      body: JSON.stringify(item),})
+      .then(() => {
+        console.log('task marked as completed')
+    });
   }
-  
-  
-  }, [page]);
 
 
- const link = 'http://localhost:8000/api/todos/'
-
-
-
-const completed = function(item) {
-  
-  item.completed = !item.completed;
-  fetch(link, {
-    method: 'POST',
-    headers: {"Content-type": "application/json; charset=UTF-8"},
-    body: JSON.stringify(item),})
-    .then(() => {
-      console.log('task marked as completed')
-  });
-}
-
-
-const deleteItem = function(item) {
-  
-  fetch(link + item.id, {
-    method: 'DELETE',
-    headers: {"Content-type": "application/json; charset=UTF-8"},
-    // body: JSON.stringify(item),
-  })
-    .then(() => {
-      console.log('task marked as DELETED')
-  });
+  const deleteItem = function(item) {
+    fetch(link + item.id, {
+      method: 'DELETE',
+      headers: {"Content-type": "application/json; charset=UTF-8"}
+    })
+  };
+      
     
-}
 
 
-  
   var renderItems = () => {
-
+    console.log(res)
     if (res != null) {
-    const newItems = res.results;
-    // .filter(item => item.completed == viewCompleted);
+      console.log('code runs through renderItems')
+    const newItems = res.results
+      // .filter(item => item.completed == viewCompleted);
     return newItems.map(item => (
-      <li 
-        key={item.id}
-        >
+      <li key={item.id}>
           <span
             title={item.description}>
-              {item.title}
-              
-              <button className='mark' onClick={(event) =>  completed(item) }>{viewCompleted ? 'mark as incomplete' : 'mark as complete'}</button>
-              <button className='delete' onClick={(event) =>  deleteItem(item) }>Delete</button>
- 
+              {item.title} - Completed: {String(item.completed)}   
+              <button className='mark'
+               onClick={() => completed(item) }>
+                 {viewCompleted ? 'mark as incomplete' :
+                  'mark as complete'}</button>
+              <button className='delete'
+               onClick={() =>  {
+                deleteItem(item);
+                console.log('delete fetch follows')
+                res.results.splice(res.results.indexOf(item), 1)
+                setRes(res)
+                fetchPage(page);         
+                }}>
+                 Delete
+              </button>
+
             </span>
         </li>
     )
@@ -99,80 +89,107 @@ const deleteItem = function(item) {
     else return '';
   }
 
+  useEffect(() => {
+    fetchPage(1);
+    setActive(1)
+    }, [viewCompleted]);
+
+ 
+  
   const fetchPage = function(number) {
-    //  setPage(number);
     try {
-      fetch('http://localhost:8000/api/todos/?page=' + number + '&completed=' + viewCompleted)
+      fetch('http://localhost:8000/api/todos/?page=' + number +
+       '&completed=' + viewCompleted)
       .then( fetchedList => fetchedList.json() )
       .then( list => {
-        
-        console.log('aici e lista', list)
-        
+        console.log('aici e lista in fetchPage', list)
         setRes(list);
-        // setList(list.results);
-        // setCount(list.count);
+      
       })
-        
-    }
-    
+    }  
     catch (eroare) {
       console.log(eroare)
-    }
+      }
   }
+
+  
 
   const fetchPageClick = function(e) {
-    const pageIndex = e.target.text
-    fetchPage(pageIndex)
+    const pageIndex = e.target.text;
+    setPage(Number(pageIndex));
+    fetchPage(pageIndex);
   }
 
+  useEffect(() => {
+    renderPagination()
+    }, [active, res])
+  
   const renderPagination = function() {
     let total = res != null ? res.count : 0;
     let pageCount = total / 5
-    if (total % 5 > 0) pageCount++
+    if (total % 5 > 0) pageCount++;
 
-    let active = 1;
+    
     let items = [];
     
     for (let number = 1; number <= pageCount; number++) {
-      console.log('number', number)
       items.push(
-        <Pagination.Item onClick={fetchPageClick} key={number} active={number === active}>
+        <Pagination.Item onClick={(e) => {
+          if (number != active) {
+          fetchPageClick(e);
+          setActive(Number(e.target.text))}
+          }}
+          key={number}
+          active={number === active}>
           {number}
         </Pagination.Item>,
       );
     }
-
-    const paginationBasic = (
+    const paginationRow = (
       <div>
         <Pagination>{items}</Pagination>
         <br />
 
       </div>
     );
-    
-    return paginationBasic;
+    return paginationRow;
   }
 
-  console.log('page number', page)
+  let completion = ''
+  if (viewCompleted) completion = 'completed'
+  else completion = 'not completed'
 
   return (
    
     <div className='switchboard'>
-      <h1>Tasks that remain to be done: </h1>
-            <ul >
-              {renderItems()}
-            </ul>
-            {renderPagination()}
-            <button className='button' onClick={() => {
-              setShow(!show)
-             
-            }
-            }>Add a task </button>
+      <div>
+        <h1>Tasks that are {completion}: </h1>
+      </div>
+      <div>
+        <ul >
+          {renderItems()}
+        </ul>
+        {renderPagination()}
+        <button className='button' onClick={() => {
+          setShow(!show)
+        }
+        }>Add a task </button>
+        <label className='switch'>
+          <input type='checkbox'
+          onClick={() => setView(!viewCompleted) }>
+          </input>
+          <span className='slider' />
+        </label>
+        <label id='toggle-text'>{ viewCompleted ?
+          'switch to completed tasks' :
+          'switch to tasks that are completed' }            
+        </label>
+      </div>
+
+      <div className='modalBox'>
+        <MyModal appear={display}/>
+      </div>
             
-            <input type='checkbox' onClick={(event) => setView(!viewCompleted) }></input>
-            <label>{ viewCompleted ? 'show not completed tasks' : 'show tasks that are completed' }            
-            </label>
-            <MyModal appear={display}/>
           
    
 
