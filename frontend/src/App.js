@@ -28,7 +28,7 @@ function App() {
   if (show) {
     display = {display: 'block',
   height: '300px',
-  width: '40vw'}
+  width: '400px'}
   }
 
   const link = 'http://localhost:8000/api/todos/'
@@ -187,7 +187,8 @@ function App() {
       </div>
 
       <div className='modalBox'>
-        <MyModal appear={display}/>
+        <MyModal appear={display}
+          show={show} />
       </div>
             
           

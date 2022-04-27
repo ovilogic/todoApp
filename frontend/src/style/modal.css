@@ -5,11 +5,9 @@
 .modal {
     display: none;
     border: 2px black solid;
-    height: 20vh;
-    
-    
     padding: 20px;
     background-color: bisque;
+   
     
 }
 
@@ -22,5 +20,5 @@ form button {
     padding: 2px;
     border-radius: 5px;
     border: 2px solid black;
-    transition-dur1ation: 1s;
+    transition-duration: 1s;
 }

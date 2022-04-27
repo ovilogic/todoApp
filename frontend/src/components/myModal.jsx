@@ -26,39 +26,42 @@ const MyModal = (props) => {
                 setSubmit(
                     {
                         title: title,
-                        description: descr,
-        
+                        description: descr
                     }
                     );
                     
                 setTitle('');
                 setDescr('');
+                
                 console.log('new task added')
             });
 
         
         
     }
-
+    
     
     return ( 
         <div className='modal' style={props.appear}>
             
-            <form onSubmit={() => {
-                // e.preventDefault();
-                saveToDo()
+            <form onSubmit={(e) => {
+                e.preventDefault();
+                saveToDo();
                 }
-                
                 }
             >
                 <label htmlFor='title'>Title: </label>
-                <input type='text' name='title' value={title} onChange={(event) => setTitle(event.target.value)}></input><br />
-                <label htmlFor='description'>Description: </label><br />
-                <textarea name='description' value={descr} onChange={(event) => setDescr(event.target.value)}></textarea><br />
+                <input type='text' name='title' value={title}
+                 onChange={(event) => setTitle(event.target.value)}>
+                     </input><br />
+                <label htmlFor='description'>
+                    Description: </label><br />
+                <textarea name='description' value={descr}
+                 onChange={(event) => setDescr(event.target.value)}>
+                     </textarea><br />
                 
                 <button type='submit' >Submit</button>
             </form>
-            
 
         </div>
      );
