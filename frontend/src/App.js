@@ -7,8 +7,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 
 
-
-
 function App() {
   const [toDos, setToDo] = useState([])
   const [viewCompleted, setView] = useState(false)
@@ -24,12 +22,7 @@ function App() {
   const [res, setRes] = useState(null)
   const [active, setActive] = useState(1)
 
-  let display = {}
-  if (show) {
-    display = {display: 'block',
-  height: '300px',
-  width: '400px'}
-  }
+ 
 
   const link = 'http://localhost:8000/api/todos/'
 
@@ -45,6 +38,8 @@ function App() {
   }
 
 
+
+
   const deleteItem = function(item) {
     fetch(link + item.id, {
       method: 'DELETE',
@@ -54,11 +49,10 @@ function App() {
       
     
 
-
   var renderItems = () => {
     console.log(res)
     if (res != null) {
-      console.log('code runs through renderItems')
+      
     const newItems = res.results
       // .filter(item => item.completed == viewCompleted);
     return newItems.map(item => (
@@ -102,7 +96,7 @@ function App() {
        '&completed=' + viewCompleted)
       .then( fetchedList => fetchedList.json() )
       .then( list => {
-        console.log('aici e lista in fetchPage', list)
+       
         setRes(list);
       
       })
@@ -112,7 +106,7 @@ function App() {
       }
   }
 
-  
+  console.log('ran through main')
 
   const fetchPageClick = function(e) {
     const pageIndex = e.target.text;
@@ -187,13 +181,14 @@ function App() {
       </div>
 
       <div className='modalBox'>
-        <MyModal appear={display}
-          show={show} />
+        <MyModal
+        show={show}
+        setShow={() => setShow(!show)}/>
+          {console.log(show, 'is show')}
       </div>
             
           
-   
-
+  
     </div>
   );
 }

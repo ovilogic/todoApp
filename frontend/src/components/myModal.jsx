@@ -1,52 +1,54 @@
 import React, { useEffect, useState } from 'react';
 import '../style/modal.css'
 
-const MyModal = (props) => {
+const MyModal = ({ show, setShow }) => {
     
     const [title, setTitle] = useState('')
     const [descr, setDescr] = useState('')
+    const [box, setBox] = useState({})
+  
     
-    const [submit, setSubmit] = useState(
-        {
-           title: '',
-           description: '',
-        }
-    )
     
-
     const saveToDo = function() {
         fetch('http://localhost:8000/api/todos/', {
             method: 'POST',
             headers: {"Content-type": "application/json; charset=UTF-8"},
-            body: JSON.stringify(submit),
-            
+            body: JSON.stringify({
+                title: title,
+                description: descr
+            }),
         }
         )
             .then(() => {
-                setSubmit(
-                    {
-                        title: title,
-                        description: descr
-                    }
-                    );
-                    
                 setTitle('');
                 setDescr('');
+                console.log('new task added with title, description and submit object', title, descr )
                 
-                console.log('new task added')
             });
 
-        
-        
     }
+
+   
+  useEffect(() => {
+    if (show) {
+      setBox({display: 'block',
+        height: '300px',
+        width: '400px'}
+      )
+    }
+    }, [show])
+  
+
     
     
     return ( 
-        <div className='modal' style={props.appear}>
+        <div className='modal' style={box}>
             
             <form onSubmit={(e) => {
                 e.preventDefault();
-                saveToDo();
+                setBox({});
+                setShow();
+                saveToDo();               
                 }
                 }
             >
